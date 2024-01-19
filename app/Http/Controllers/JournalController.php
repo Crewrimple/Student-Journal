@@ -38,7 +38,7 @@ class JournalController extends Controller
     {
         $student = Student::findOrFail($id);
         $scores = Score::where('student_id', $id)->get();
-    
+        
         return view('journal.edit', compact('student', 'scores'));
     }
 
