@@ -19,6 +19,7 @@ class JournalController extends Controller
     public function create()         
     {
         return view('journal.create');
+        
     }
 
     public function store(Request $request)
