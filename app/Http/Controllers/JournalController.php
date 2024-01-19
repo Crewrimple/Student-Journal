@@ -16,7 +16,7 @@ class JournalController extends Controller
         return view('journal.index', compact('students'));
     }
 
-    public function create()
+    public function create()         
     {
         return view('journal.create');
     }
@@ -24,7 +24,7 @@ class JournalController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255', 
         ]);
 
         $student = Student::create([
