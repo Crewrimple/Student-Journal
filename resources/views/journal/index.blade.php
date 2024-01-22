@@ -65,9 +65,13 @@
             width: 10px;
         }
     </style>
-     <div class="wrapper">
+    <div class="wrapper">
         <h2 class="text-center">Table students</h2>
-
+        @if ($errors->any())
+        @foreach ($errors->all() as $item)
+            <h4 class="text-danger">{{$item}}</h4>
+        @endforeach            
+        @endif
         <table class="table_content">
             <thead>
                 <tr class="table_row">
@@ -109,36 +113,37 @@
                 </tr>
             </thead>
             <tbody>
-                
+
                 @foreach ($students as $student)
                     <tr class="table_row">
                         <td class="number_student">{{ $student->id }}</td>
                         <td class="name__student">{{ $student->name }}</td>
                         @foreach ($student->scores as $score)
-                            <td class="bg-green" onclick="updateScore('{{ $score->score }}', '{{ $student->id }}')">
+                            {{-- <td class="bg-green" onclick="updateScore('{{ $score->score }}', '{{ $student->id }}')">
                                 {{ $score->score }}
-                            </td>
+                            </td> --}}
+                            <form action="{{ route('journal.update', $score->id) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <td class="p-0">
+                                    <input type="text" value="{{ $score->score }}" style="width: 100%;" name="score">
+                                    <input type="hidden" name="date" value="{{$score->date}}">
+                                </td>
+                            </form>
                         @endforeach
                     </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
-    <form action="{{ route('journal.store') }}" method="post">
-        @csrf
-        <div class="mb-3">
-            <label for="name" class="form-label">Имя ученика:</label>
-            <input type="text" name="name" class="form-control" required>
-        </div>
-        <button type="submit" class="btn btn-success">Добавить ученика</button>
-    </form>
+ 
 @endsection
 
 
 @section('scripts')
     <script>
-        function updateScore(score, scoreId) {
-            window.location.href = '{{ url('/edit/') }}' + '/' + scoreId;
-        }
+        // function updateScore(score, scoreId) {
+        //     window.location.href = '{{ url('/edit/') }}' + '/' + scoreId;
+        // }
     </script>
 @endsection

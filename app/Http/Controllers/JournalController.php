@@ -13,20 +13,18 @@ class JournalController extends Controller
     {
         $students = Student::with('scores')->get();
 
-
         return view('journal.index', compact('students'));
     }
 
-    public function create()         
+    public function create()
     {
         return view('journal.create');
-        
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',    
+            'name' => 'required|string|max:255',
         ]);
 
         $student = Student::create([
@@ -35,29 +33,28 @@ class JournalController extends Controller
 
         return Redirect::route('journal.edit', $student->id)->with('success', 'Ученик успешно добавлен.');
     }
+
     public function edit($id)
     {
         $student = Student::findOrFail($id);
         $scores = Score::where('student_id', $id)->get();
-        
+
         return view('journal.edit', compact('student', 'scores'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Score $score)
     {
         $request->validate([
             'score' => 'required|integer',
             'date' => 'required|date',
         ]);
-
-        $student = Student::findOrFail($id);
-
-        $score = new Score([
+        
+        $score->update(
+          [
             'score' => $request->score,
             'date' => $request->date,
-        ]);
-
-        $student->scores()->save($score);
+          ]
+        );
 
         return redirect()->route('journal.index')->with('success', 'Баллы успешно добавлены.');
     }
