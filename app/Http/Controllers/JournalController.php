@@ -13,6 +13,7 @@ class JournalController extends Controller
     {
         $students = Student::with('scores')->get();
 
+
         return view('journal.index', compact('students'));
     }
 
@@ -25,7 +26,7 @@ class JournalController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255', 
+            'name' => 'required|string|max:255',    
         ]);
 
         $student = Student::create([

@@ -39,6 +39,7 @@
                         <td>{{ $score->date }}</td>
                     </tr>
                 @endforeach
+                
             </tbody>
         </table>
     </div>

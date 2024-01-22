@@ -19,3 +19,4 @@ Route::post('/journal', [JournalController::class, 'store'])->name('journal.stor
 Route::get('/journal/{id}/edit', [JournalController::class, 'edit'])->name('journal.edit');
 Route::put('/journal/{id}', [JournalController::class, 'update'])->name('journal.update');
 Route::put('/journal/{id}', [JournalController::class, 'update'])->name('journal.update');
+Route::get('/edit/{scoreId}', [JournalController::class, 'edit'])->name('journal.edit');
