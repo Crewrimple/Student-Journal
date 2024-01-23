@@ -14,7 +14,8 @@ use App\Http\Controllers\JournalController;
 */
 
 Route::get('/journal', [JournalController::class, 'index'])->name('journal.index');
-Route::get('/journal/create', [JournalController::class, 'create'])->name('journal.create');
+
 Route::post('/journal', [JournalController::class, 'store'])->name('journal.store');
-Route::get('/journal/{score}/edit', [JournalController::class, 'edit'])->name('journal.edit');
+
 Route::put('/journal/{score}', [JournalController::class, 'update'])->name('journal.update');
+

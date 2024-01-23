@@ -68,82 +68,65 @@
     <div class="wrapper">
         <h2 class="text-center">Table students</h2>
         @if ($errors->any())
-        @foreach ($errors->all() as $item)
-            <h4 class="text-danger">{{$item}}</h4>
-        @endforeach            
+            @foreach ($errors->all() as $item)
+                <h4 class="text-danger">{{ $item }}</h4>
+            @endforeach
         @endif
         <table class="table_content">
             <thead>
                 <tr class="table_row">
-                    <th rowspan="2" class="number__cell">No</th>
+                    <th class="text-center" rowspan="2" class="number__cell">No</th>
                     <th rowspan="2" class="name__cell">Ism va familiyalar</th>
-                    <th colspan="32">Yanvar</th>
+                    <th class="text-center" colspan="32">Yanvar</th>
                 </tr>
-                <tr class="table_row">
-                    <th class="day__cell">1</th>
-                    <th class="day__cell">2</th>
-                    <th class="day__cell">3</th>
-                    <th class="day__cell">4</th>
-                    <th class="day__cell">5</th>
-                    <th class="day__cell">6</th>
-                    <th class="day__cell">7</th>
-                    <th class="day__cell">8</th>
-                    <th class="day__cell">9</th>
-                    <th class="day__cell">10</th>
-                    <th class="day__cell">11</th>
-                    <th class="day__cell">12</th>
-                    <th class="day__cell">13</th>
-                    <th class="day__cell">14</th>
-                    <th class="day__cell">15</th>
-                    <th class="day__cell">16</th>
-                    <th class="day__cell">17</th>
-                    <th class="day__cell">18</th>
-                    <th class="day__cell">19</th>
-                    <th class="day__cell">20</th>
-                    <th class="day__cell">21</th>
-                    <th class="day__cell">22</th>
-                    <th class="day__cell">23</th>
-                    <th class="day__cell">24</th>
-                    <th class="day__cell">25</th>
-                    <th class="day__cell">26</th>
-                    <th class="day__cell">27</th>
-                    <th class="day__cell">28</th>
-                    <th class="day__cell">29</th>
-                    <th class="day__cell">30</th>
+                <tr class="table_row ">
+                    @for ($day = 1; $day <= 31; $day++)
+                        <th class="text-center">{{ $day }}</th>
+                    @endfor
                 </tr>
             </thead>
             <tbody>
-
                 @foreach ($students as $student)
                     <tr class="table_row">
                         <td class="number_student">{{ $student->id }}</td>
                         <td class="name__student">{{ $student->name }}</td>
-                        @foreach ($student->scores as $score)
-                            {{-- <td class="bg-green" onclick="updateScore('{{ $score->score }}', '{{ $student->id }}')">
-                                {{ $score->score }}
-                            </td> --}}
-                            <form action="{{ route('journal.update', $score->id) }}" method="POST">
-                                @csrf
-                                @method('PUT')
-                                <td class="p-0">
-                                    <input type="text" value="{{ $score->score }}" style="width: 100%;" name="score">
-                                    <input type="hidden" name="date" value="{{$score->date}}">
-                                </td>
-                            </form>
+
+                        @foreach (range(1, 31) as $day)
+                            @php
+                                $scoreForDay = $student->scores->where('date', date('Y-m-d', strtotime("2024-01-$day")))->first();
+                            @endphp
+
+                            @if ($scoreForDay)
+                                <form action="{{ route('journal.update', $scoreForDay->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <td class="p-0">
+                                        <input  type="text" class="border-0 outline-0 text-center"
+                                            value="{{ $scoreForDay->score }}" style="width: 100%;" name="score">
+                                        <input type="hidden" name="date"
+                                            value="{{ date('Y-m-d', strtotime("2024-01-$day")) }}">
+                                    </td>
+                                </form>
+                            @else
+                                <form action="{{ route('journal.store') }}" method="POST">
+                                    @csrf
+                                    <td class="p-0">
+                                        <input class="border-0 outline-0 text-center" type="text" value="" style="width: 100%;" name="score">
+                                        <input type="hidden" name="date"
+                                            value="{{ date('Y-m-d', strtotime("2024-01-$day")) }}">
+                                        <input type="hidden" name="student_id" value="{{ $student->id }}">
+                                    </td>
+                                </form>
+                            @endif
                         @endforeach
                     </tr>
                 @endforeach
             </tbody>
+
         </table>
     </div>
- 
 @endsection
 
-
 @section('scripts')
-    <script>
-        // function updateScore(score, scoreId) {
-        //     window.location.href = '{{ url('/edit/') }}' + '/' + scoreId;
-        // }
-    </script>
+    <script></script>
 @endsection

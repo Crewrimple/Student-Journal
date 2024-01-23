@@ -16,30 +16,21 @@ class JournalController extends Controller
         return view('journal.index', compact('students'));
     }
 
-    public function create()
-    {
-        return view('journal.create');
-    }
-
-    public function store(Request $request)
+     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'score' => 'required|integer',
+            'date' => 'required|date',
+            'student_id' => 'required|exists:students,id',
         ]);
 
-        $student = Student::create([
-            'name' => $request->name,
+        Score::create([
+            'score' => $request->score,
+            'date' => $request->date,
+            'student_id' => $request->student_id,
         ]);
 
-        return Redirect::route('journal.edit', $student->id)->with('success', 'Ученик успешно добавлен.');
-    }
-
-    public function edit($id)
-    {
-        $student = Student::findOrFail($id);
-        $scores = Score::where('student_id', $id)->get();
-
-        return view('journal.edit', compact('student', 'scores'));
+        return redirect()->route('journal.index');
     }
 
     public function update(Request $request, Score $score)
@@ -48,14 +39,12 @@ class JournalController extends Controller
             'score' => 'required|integer',
             'date' => 'required|date',
         ]);
-        
-        $score->update(
-          [
+
+        $score->update([
             'score' => $request->score,
             'date' => $request->date,
-          ]
-        );
+        ]);
 
-        return redirect()->route('journal.index')->with('success', 'Баллы успешно добавлены.');
+        return redirect()->route('journal.index');
     }
 }
