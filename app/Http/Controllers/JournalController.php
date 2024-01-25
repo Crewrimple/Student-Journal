@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Student;
 use App\Models\Score;
-use Illuminate\Support\Facades\Redirect;
+use App\Models\Student;
+use Illuminate\Http\Request;
 
 class JournalController extends Controller
 {
@@ -16,21 +15,25 @@ class JournalController extends Controller
         return view('journal.index', compact('students'));
     }
 
-     public function store(Request $request)
+    public function store(Request $request)
     {
+        // dd($request);
         $request->validate([
             'score' => 'required|integer',
             'date' => 'required|date',
             'student_id' => 'required|exists:students,id',
         ]);
 
-        Score::create([
+        Score::query()->create([
             'score' => $request->score,
             'date' => $request->date,
             'student_id' => $request->student_id,
         ]);
 
-        return redirect()->route('journal.index');
+        return response()->json([
+            'data' => 'success store'
+        ]);
+        // return redirect()->route('journal.index');
     }
 
     public function update(Request $request, Score $score)
@@ -45,6 +48,7 @@ class JournalController extends Controller
             'date' => $request->date,
         ]);
 
-        return redirect()->route('journal.index');
+        return response()->json(['data' => 'success update']);
+        // return redirect()->route('journal.index');
     }
 }

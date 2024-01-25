@@ -97,24 +97,27 @@
                             @endphp
 
                             @if ($scoreForDay)
-                                <form action="{{ route('journal.update', $scoreForDay->id) }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
+                                <form>
+                                    {{-- @csrf
+                                    @method('PUT') --}}
                                     <td class="p-0">
-                                        <input  type="text" class="border-0 outline-0 text-center"
-                                            value="{{ $scoreForDay->score }}" style="width: 100%;" name="score">
-                                        <input type="hidden" name="date"
-                                            value="{{ date('Y-m-d', strtotime("2024-01-$day")) }}">
+                                        <input type="text" class="border-0 outline-0 text-center" style="width: 100%;"
+                                            name="score" value="{{ $scoreForDay->score }}"
+                                            onkeyup="updateScore('{{ $scoreForDay->id }}', this.value, '{{ date('Y-m-d', strtotime('2024-01-' . $day)) }}')">
+                                        {{-- <input type="hidden" name="date"
+                                            value="{{ date('Y-m-d', strtotime("2024-01-$day")) }}"> --}}
                                     </td>
                                 </form>
                             @else
-                                <form action="{{ route('journal.store') }}" method="POST">
-                                    @csrf
+                                <form>
+                                    {{-- @csrf --}}
                                     <td class="p-0">
-                                        <input class="border-0 outline-0 text-center" type="text" value="" style="width: 100%;" name="score">
-                                        <input type="hidden" name="date"
-                                            value="{{ date('Y-m-d', strtotime("2024-01-$day")) }}">
-                                        <input type="hidden" name="student_id" value="{{ $student->id }}">
+                                        <input class="border-0 outline-0 text-center" type="text" value=""
+                                            style="width: 100%;" name="score"
+                                            onkeyup="storeScore('{{ date('Y-m-d', strtotime('2024-01-' . $day)) }}', this.value, '{{ $student->id }}')">
+                                        {{-- <input type="hidden" name="date"
+                                            value="{{ date('Y-m-d', strtotime("2024-01-$day")) }}"> --}}
+                                        {{-- <input type="hidden" name="student_id" value="{{ $student->id }}"> --}}
                                     </td>
                                 </form>
                             @endif
@@ -128,5 +131,48 @@
 @endsection
 
 @section('scripts')
-    <script></script>
+    <script>
+        function storeScore(date, score, studentId) {
+            let route = "{{ route('journal.store') }}";
+            // console.log('success: ', date, score, studentId)
+            $.ajax({
+                type: "POST",
+                url: route,
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    student_id: studentId,
+                    score: score,
+                    date: date,
+                },
+                success: function(data) {
+                    console.log(data);
+                },
+                error: function(err) {
+                    console.log(err)
+                }
+            })
+        }
+
+        function updateScore(scoreId, score, date) {
+            let route = "{{ route('journal.update', [':id']) }}",
+                url = route.replace(':id', scoreId);
+            // console.log(date, score, scoreId)
+            $.ajax({
+                type: "PUT",
+                url: url,
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id: scoreId,
+                    score: score,
+                    date: date,
+                },
+                success: function(data) {
+                    console.log(data);
+                },
+                error: function(err) {
+                    console.log(err)
+                }
+            })
+        }
+    </script>
 @endsection
