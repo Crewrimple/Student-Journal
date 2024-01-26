@@ -98,26 +98,18 @@
 
                             @if ($scoreForDay)
                                 <form>
-                                    {{-- @csrf
-                                    @method('PUT') --}}
                                     <td class="p-0">
                                         <input type="text" class="border-0 outline-0 text-center" style="width: 100%;"
                                             name="score" value="{{ $scoreForDay->score }}"
                                             onkeyup="updateScore('{{ $scoreForDay->id }}', this.value, '{{ date('Y-m-d', strtotime('2024-01-' . $day)) }}')">
-                                        {{-- <input type="hidden" name="date"
-                                            value="{{ date('Y-m-d', strtotime("2024-01-$day")) }}"> --}}
                                     </td>
                                 </form>
                             @else
                                 <form>
-                                    {{-- @csrf --}}
                                     <td class="p-0">
                                         <input class="border-0 outline-0 text-center" type="text" value=""
                                             style="width: 100%;" name="score"
                                             onkeyup="storeScore('{{ date('Y-m-d', strtotime('2024-01-' . $day)) }}', this.value, '{{ $student->id }}')">
-                                        {{-- <input type="hidden" name="date"
-                                            value="{{ date('Y-m-d', strtotime("2024-01-$day")) }}"> --}}
-                                        {{-- <input type="hidden" name="student_id" value="{{ $student->id }}"> --}}
                                     </td>
                                 </form>
                             @endif

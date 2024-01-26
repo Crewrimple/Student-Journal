@@ -17,7 +17,7 @@ class JournalController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request);
+ 
         $request->validate([
             'score' => 'required|integer',
             'date' => 'required|date',
@@ -33,7 +33,7 @@ class JournalController extends Controller
         return response()->json([
             'data' => 'success store'
         ]);
-        // return redirect()->route('journal.index');
+     
     }
 
     public function update(Request $request, Score $score)
@@ -49,6 +49,6 @@ class JournalController extends Controller
         ]);
 
         return response()->json(['data' => 'success update']);
-        // return redirect()->route('journal.index');
+       
     }
 }
